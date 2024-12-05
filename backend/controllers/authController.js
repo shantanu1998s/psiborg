@@ -93,10 +93,7 @@ const updateProfile = async (req, res) => {
 
 // Logout user functionality
 const logout = (req, res) => {
-    // For JWT, there's nothing to do on the server side in terms of session termination
-    // We can inform the user to discard their token on the client side.
-    
-    // Here you can implement a token blacklist if needed or just respond with a success message.
+   
     res.status(200).json({ message: 'Logout successful. Please discard the JWT token on the client side.' });
 };
 
