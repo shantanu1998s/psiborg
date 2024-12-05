@@ -43,6 +43,29 @@ async function deleteTask(req, res) {
     res.status(200).json({ message: 'Task deleted successfully' });
 }
 
-module.exports = { createTask, getTasks, updateTask, deleteTask };
+
+
+const searchTasks = async (req, res) => {
+    try {
+      const { status, priority, dueDate, keyword } = req.query;
+  
+      // Create a dynamic filter object based on the query parameters
+      const filter = {};
+      if (status) filter.status = status;
+      if (priority) filter.priority = priority;
+      if (dueDate) filter.dueDate = { $lte: new Date(dueDate) };
+      if (keyword) filter.$text = { $search: keyword };
+  
+      // Fetch tasks with sorting by due date
+      const tasks = await Task.find(filter).sort({ dueDate: 1 });
+  
+      res.status(200).json({ success: true, tasks });
+    } catch (error) {
+      res.status(500).json({ success: false, message: 'Error fetching tasks', error: error.message });
+    }
+  };
+  
+
+module.exports = { createTask, getTasks, updateTask, deleteTask, searchTasks };
 
 
